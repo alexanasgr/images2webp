@@ -1,50 +1,26 @@
 import os
-from os import listdir
+from pathlib import Path
+from PIL import Image
 
 # This 🐍 App converts all images from source Folder
 #  to modern WEBP format into output directory
 
-sourceDir = "source"
-outputDir = "output"
+
+def convert_to_webp(source):
+
+    destination = source.with_suffix(".webp")
+    image = Image.open(source)  # Open image
+    image.save(destination, format="webp")  # Convert image to webp
+
+    return destination
 
 
-# check if folders  exists
-def checkPathExists(sourceDir,outputDir):
-
-    source =  os.path.isdir(sourceDir)
-    output =  os.path.isdir(outputDir)
-    
-    if((source) == True & (output) == True):
-        
-        # if folders exists load images from source
-         loadImagesFromSource()
-        
-        # otherwise return error
-    else:
-        print("Something went wrong......")
-            
-        
-    
-# the actual convertation function
-def loadImagesFromSource():
-    
-    for images in os.listdir(sourceDir):
-         if (images.endswith(".jpg")):
-            
-             # now convert those images to webp
-             convertSupportedImages(images)
-             
-            
-# the convertion method        
-def convertSupportedImages(images):
-    for img  in images:
-        print(f"Image: {img} converted  success..")
-           
-    
-
-# main method here
 def main():
-   checkPathExists(sourceDir,outputDir)
+    paths = Path("images").glob("**/*.jpg")
+    for path in paths:
+        webp_path = convert_to_webp(path)
+        print(webp_path)
+
 
 # some extra 🔒 for this app
 if __name__ == '__main__':
